@@ -9,7 +9,9 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +21,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class GmailUseingSauce {
+public class SauceFirefox {
 
 	public static final String USERNAME = "ceverticals";
 	public static final String ACCESS_KEY = "01ab271b-b715-40b4-aa91-36dd6a825260";
@@ -29,14 +31,12 @@ public class GmailUseingSauce {
 
 		MutableCapabilities sauceOptions = new MutableCapabilities();
 
-		ChromeOptions browserOptions = new ChromeOptions();
-		browserOptions.setExperimentalOption("w3c", true);
+		FirefoxOptions browserOptions = new FirefoxOptions();
 		browserOptions.setCapability("platformName", "Windows 10");
-		browserOptions.setCapability("browserVersion", "79.0");
+		browserOptions.setCapability("browserVersion", "69.0");
 		browserOptions.setCapability("sauce:options", sauceOptions);
 
 		WebDriver driver = new RemoteWebDriver(new URL(URL), browserOptions);
-		//WebDriver driver = new RemoteWebDriver(new URL(URL), browserOptions);
 		System.out.println("Sauce connection initiated");
 		driver.get("https://www.gmail.com/");
 		System.out.println("gmail login opened");
@@ -48,22 +48,15 @@ public class GmailUseingSauce {
 		driver.findElement(By.name("password")).sendKeys("Password!@#", Keys.ENTER);
 		System.out.println("Password entered");
 		// driver.close();
-		
-		  WebElement inboxsSection =driver.findElement(By.className("UKr6le"));
-		 inboxsSection.click();
-		 
-		List<WebElement> a = driver.findElements(By.xpath("//*[@class='yW']/span"));
-		System.out.println(a.size());
-		Thread.sleep(3000);
-		            for(int i=0;i<a.size();i++){
-		                System.out.println(a.get(i).getText());
-			
-			  if(a.get(i).getText().equals("Google")){ 
-				  a.get(i).click(); }
-			 
-		            }
+		List<WebElement> email = driver.findElements(By.xpath("//*[@id=\":2a\"]"));
+
+		for(WebElement emailsub : email){
+		    if(emailsub.getText().equals("FW: We’ve issued you a refund") == true){
+
+		           emailsub.click();
+		           break;
+		        }
 		    }
-	
 	}
 
-
+}
